@@ -1,0 +1,325 @@
+
+
+3
+Q . Create table Tutorial (tutorial_id,tut_title,author,submission_date)
+Implement following operations on above table
+1) Display all the tutorial details
+2) Find specific tutorial_id and author of respective tutorial.
+3) Display all the records of tutorial where author name ending with ”Sa”
+4) Display all tutorials in Ascending and Descending order according to tutorial_id or author name.
+5) Write a PL/SQL function to find out submission_date of specific tutorial
+delimiter $
+drop function if exists myfunct $
+create function myfunct(cno int) returns varchar(50)
+begin
+declare temp varchar(50);
+select name into temp from customer where cust_no = cno;
+return temp;
+end$
+	
+
+
+Part C MONGO DB
+
+					11
+ Create a database using MongoDB ,:
+ 
+ Create the collection employee(empid, name, city ,age, salary,grade)
+1.	Show following insert validation . Store all validation in a single Rule
+a.	Accept the  city from(pune, Mumbai, Chennai, Delhi), 
+b.	Salary Key  (should be greater than 1000). 
+c.	Accept the Grade ( A,B,C)
+d.	empid  is a mandatory key.
+e.	name key is  string datatype..
+db.createCollection("employee",{
+  validator:
+  {
+    empid:{$exists:true},
+    name:{$type:"string"},
+    city:{$in:['pune', 'mumbai','chennai','delhi']},
+    salary:{$gt:1000},
+    grade:{$in:['A','B','C']}
+  }
+})
+f.	Insert the  documents in collection employee(use batch insert (use bulk insert , insertmany) )
+2.	Write a MongoDB query to display the total no. of  documents in the collection employee
+3.	Update the document with  the salary to 30000 whose grade Is A.
+4.	Give rise in employee salary of rs. 5000 from other than  Pune city
+5.	Replace the document whose empid is 6.
+6.	Find the document with name Sunil and replace it with Anil  (use findoneAndReplace)
+7.	Add employee Amit  with proper key values from collection  if not exists  to the collection .(Use of upsert)
+8.	Add employee Wasim with proper key values and return the updated document
+9.	Remove the documents  who are from Delhi city.
+10.	Give  a raise of 1000 in existing salary for employee having name Amit.
+
+
+                                                         12
+  Execute at least 10 queries on following  MongoDB database 
+   	Create the collection student(id, name, age, status, marks[])
+ Insert the  documents in collection student(use batch insert (use bulk insert , insertmany)   suitable to solve the given  queries
+1.	Write a MongoDB query to display all the documents in the collection users.
+2.	Display the list of documents in the descending order of id.
+3.	Display the documents whose status is A
+4.	Display the documents whose status is other than A
+5.	Display the documents with status A and age greater than 15
+6.	Display the documents with age in the range of 20 to 50
+7.	Display the count  of documents with age less than 55 .
+8.	Write a query to the document where the name field has a null value:
+9.	Display the document whose name starts with character s (use of $regx)
+10.	Query the document to display the list starting with s character and ending with h apart from case sensitivity.
+11.	Display the documents having marks greater than 40
+12.	Display the documents having marks greater than 60 at 2nd position in the array.
+db.student.find({"marks.2":{$gt:40}})
+
+
+13
+    Execute queries on MongoDB database 
+Create the collection customer(id, name, city,credit, debit), 
+insert min 10 documents.
+Display the list of customers having same credit and debit values
+1.	Display the list of customers having high credit and low debit values using functions.
+2.	Display the list of customers having same credit and debit values or greater debit value than credit values using function
+3.	Display the name and city of customer using cursor
+4.	Display the list of first five customers
+5.	Display 8and 9 no. customers from the collection
+6.	Display the list of customers in ascending order of city.
+7.	Query to Rename the collection to new_customer
+8.	Display the mongodb configuration details  
+9.	Write a query to drop the collection .
+
+
+14
+4. A. Implement Map reduce example .   Assume suitable data
+
+4.B. Q.  student=(roll_no  ,name  , marks  );
+result(roll_no  name  result  );
+Write a trigger 
+ When you are inserting record in student table trigger will calculate grade of student and will insert grade in result table along with roll_no and name.
+delimiter $
+drop trigger trigger1$
+create trigger trigger1 before insert on student for each row
+begin
+declare gd varchar(2) default "A+";
+if new.marks>=80 then
+ set gd= "A";
+elseif new.marks >=70 then
+ set gd= "B";
+elseif new.marks >= 60 then
+  set gd= "C";  
+else 
+  set gd= "D"; 
+end if;
+insert into result(rollno, name, grade) values(new.rollno, new.name, gd);
+end;
+$
+
+
+	                                                  15
+			
+ Implement the aggregation and indexing for following  in MongoDB. 
+Product(id, item_nm, quantity, price)
+1.	Demonstrate the following aggregation operation (Sum, Average, min,max ) on suitable key.
+2.	Create and drop different types of indexes(single, compound) .
+
+
+16
+
+ Create a database using MongoDB and demonstrate :
+ Inserting (batch insert, insert validation),  Updating document 
+
+ Create the collection movie(movieid, name, producer ,profit, grade,m_type)
+
+1.	Show following insert validation . store following validation in a single Rule
+a.	m_type is (English, Marathi,Hindi) 
+b.	profit (should be greater than 1000).  // $gt: 1000
+c.	Accept the Grade ( A,U) // $in[‘A’, ‘U’]
+d.	empid  is a mandatory key. // Exists: true
+e.	name key is  string datatype.. // name : $type : “string”
+db.createCollection("mov", { validator: { mtype: {$in:['eng', 'mar', 'hin']}
+ profit: {$gt:1000}, grade : {$in: ['A', 'U']}, empid: {$exists: true}, name
+ {$type: "string"} } })
+2.	Insert the  documents in collection movie(use batch insert (use bulk insert , insertmany) )
+3.	Write a MongoDB query to display the total no. of  documents in the collection movie // find().count()
+4.	Update the document with  the profit to 30000 whose grade Is A.
+Db.movie.update({grade: ‘A’}, {profit: 30000}})
+
+5.	Replace the document whose movieid is 6.
+Db.movie.update({movieid: 6}, {name : “Hello”, profit: 679, grade: ‘A’})
+
+6.	Find the document with name “Raees “and replace it with “bahuballi “ (use findoneAndReplace)
+db.movie.findOneAndReplace( 
+{ "movie_nm" : "Raees" }, 
+{ “movie_nm":”bahubali"}, 
+{ upsert : true, returnNewDocument: true } 
+) 
+7.	Add movie “Hindi Medium”  with proper key values from collection  if not exists  to the collection .(Use of upsert)
+8.	Add movie ” Burkha” with proper key values and return the updated document
+9.	Remove the English type movie documents  .
+10.	Give  a raise of 1000 in existing profit  for movie having name kaabil.
+db.movie.update({grade : 'A'}, {$inc : { profit : 1000 }})
+
+11.	Give rise in movie profit of rs. 5000 from other than  Hindi movies.
+
+17                       
+         E xecute at least 10 queries on following  MongoDB database 
+  Create the collection teacher(id, name, age, designation percentage [BE,ME])
+       Insert the  documents in collection student(use batch insert (use bulk insert ,  insertmany)   suitable to solve the given  queries 
+1.	Write a MongoDB query to display all the documents in the collection teacher.
+db.teacher.find().pretty()
+
+2.	Display the list of documents in the descending order of id.
+db.teacher.find().sort({id:-1}).pretty()
+
+3.	Display the documents whose designation is lecturer
+db.teacher.find({designation:"lecturer"}).pretty()
+
+4.	Display the documents whose designation is  other than lecturer
+db.teacher.find({ designation:{ $ne: "lecturer" } }).pretty()
+
+5.	Display the documents with designation is lecturer and age greater than 35
+db.teacher.find({$and : [{designation:"lecturer"}, {age : {$gt : 20}}]})
+6.	Display the documents with age in the range of 20 to 50
+db.teacher.find({$where:function(){return (this.age > 20 & this.age<50)}})
+OR
+db.teacher.find({$and : [{age:{$gt:20}}, {age: {$lt: 50}}] })
+
+7.	Display the count  of documents with age less than 55 .
+db.teacher.find({age: {$lt:30}}).count()
+8.	Write a query to the document where the name field has a null value:
+db.teacher.find({"name": null})
+
+9.	Display the document whose name starts with character s (use of $regx)
+db.teacher.find({ name : {$regex : /^S/}})
+
+10.	Query the document to display the list starting with s character and ending with h apart from case sensitivity.
+db.teacher.find({ name : {$regex : /^s\w*m$/ , $options : 'i' }})
+
+11.	Display the documents having percentage greater than 70 in ME. 
+db.teacher.find({$and : [{'class':'ME'},  {percentage : {$gt:30}}]})
+                                      
+                  18 .
+
+
+       Execute queries IN  MongoDB database 
+Create the collection student(id, name, city, marks_SE,marks_TE), 
+insert min 10 documents.
+1.	Display the list of student having same mark$s in SE and TE 
+a.	db.student.find({$where:function(){return this.se == this.te}})
+2.	Display the list of student having higher marks in SE and low marks in TE using functions.
+3.	Display the list of customers having same marks in SE and TE or greater TE marks than SE marks  using function
+4.	Display the name and city of student using cursor
+a.	var mydata = db.student.find({},{name:1,city:1})
+mydata;
+b.	db.student.find().forEach(function(mydoc){print("Name:"+mydoc.name+" City:"+mydoc.city)})
+5.	Display the list of first five student
+a.	db.student.find().limit(5)
+6.	Display 8and 9 no. student from the collection
+a.	db.student.find().skip(7).limit(2)
+7.	Display the list of students in ascending order of city.
+a.	db.student.find().sort({city:1})
+8.	Query to Rename the collection to new_student
+a.	db.student.renameCollection("new_student")
+9.	Display the mongodb configuration details  
+10.	Write a query to drop the collection .
+a.	db.newStudent.drop()
+
+19
+A.	Implement Map reduce example.  Assume suitable data
+> db.createCollection("customer")
+{ "ok" : 1 }
+
+> db.customer.insert({id:1, item:"soap", qty:2, price:10})
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({id:1, item:"bed", qty:1, price:10})
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({id:1, item:"chair", qty:2, price:100})
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({id:2, item:"chair", qty:3, price:100})
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({id:2, item:"bed", qty:4, price:200})
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({id:2, item:"soap", qty:5, price:20})
+WriteResult({ "nInserted" : 1 })
+> db.customer.find()
+{ "_id" : ObjectId("59f6138d9670ef1ea44ead79"), "id" : 1, "item" : "soap", "qty" : 2, "price" : 10 }
+{ "_id" : ObjectId("59f613949670ef1ea44ead7a"), "id" : 1, "item" : "bed", "qty" : 1, "price" : 10 }
+{ "_id" : ObjectId("59f613a39670ef1ea44ead7b"), "id" : 1, "item" : "chair", "qty" : 2, "price" : 100 }
+{ "_id" : ObjectId("59f613ad9670ef1ea44ead7c"), "id" : 2, "item" : "chair", "qty" : 3, "price" : 100 }
+{ "_id" : ObjectId("59f613b79670ef1ea44ead7d"), "id" : 2, "item" : "bed", "qty" : 4, "price" : 200 }
+{ "_id" : ObjectId("59f613c49670ef1ea44ead7e"), "id" : 2, "item" : "soap", "qty" : 5, "price" : 20 }
+
+> var map1 = function(){emit(this.id,this.qty*this.price);}
+> var reduce1 = function(id1,price1){ return Array.sum(price1);};
+> db.customer.mapReduce(map1, reduce1, {out:"mycoll"})
+{
+        "result" : "mycoll",
+        "timeMillis" : 61,
+        "counts" : {
+                "input" : 6,
+                "emit" : 6,
+                "reduce" : 2,
+                "output" : 2
+        },
+        "ok" : 1
+}
+> db.mycoll.find().pretty()
+{ "_id" : 1, "value" : 230 }
+{ "_id" : 2, "value" : 1200 }
+> db.mycoll.find().pretty()
+
+   B. Create a PL/SQL function or procedure to find sum of numbers from 0 to 100.
+create procedure prod()
+ begin
+ declare sum int;
+ declare i int;
+ set i =2;
+ set sum=1;
+ loop1 : loop
+ if i>100 then
+  leave loop1;
+ end if;
+ set sum=sum+i;
+ set i=i+1;
+ end loop loop1;
+ select sum;
+ end $
+
+					20
+    
+ Implement the aggregation and indexing for following  in MongoDB. 
+Movie(id, movie_nm, no_of_tickets, amount)
+1.	Demonstrate the following aggregation operation (Sum, Average, min,max ) on suitable key.
+db.movie.aggregate([
+
+ {$match:{amount:100}},
+
+ {$group:
+
+ {_id:"$id",
+
+ price:{$sum:"$amount"}
+
+ }
+
+ }
+
+ ])
+2.	Create and drop different types of indexes(single, compound) .
+db.employees.ensureIndex({employee_id:1})
+db.students.ensureIndex ({student_id:1,age:-1})
+db.employees.dropIndex({first_name:1})
+db.system.indexes.find()
+db.employees.getIndexes()
+db.employees.ensureIndex({first_name:1,last_name:1})
+db.employees.ensureIndex({employee_id:1},{unique:true})
+Creating a Unique Index and drop duplicates
+db.employees.ensureIndex({employee_id:1},{unique:true,dropDups:true})
+Creating a Unique Index using Sparse Option
+db.employees.ensureIndex({employee_id:1},{unique:true,sparse:true})
+Using Hint Option
+db.employees.find().sort({employee_id:1}).hint({employee_id:1})
+
+db.employees.totalIndexSize()
+db.employees.stats()
+
+
